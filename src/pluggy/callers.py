@@ -12,6 +12,7 @@ def _multicall(hook_name, hook_impls, caller_kwargs, firstresult):
 
     ``caller_kwargs`` comes from _HookCaller.__call__().
     """
+    print("PLUGGY starting _multicall()", flush=True)
     __tracebackhide__ = True
     results = []
     excinfo = None
@@ -29,7 +30,7 @@ def _multicall(hook_name, hook_impls, caller_kwargs, firstresult):
                             )
 
                 if hook_impl.hookwrapper:
-                    print("PLUGGY calling into {!r}".format(hook_impl.function.__qualname__))
+                    print("PLUGGY calling into {!r}".format(hook_impl.function.__qualname__), flush=True)
                     try:
                         gen = hook_impl.function(*args)
                         next(gen)  # first yield
@@ -37,11 +38,11 @@ def _multicall(hook_name, hook_impls, caller_kwargs, firstresult):
                     except StopIteration:
                         _raise_wrapfail(gen, "did not yield")
                     finally:
-                        print("PLUGGY returned from {!r}".format(hook_impl.function.__qualname__))
+                        print("PLUGGY returned from {!r}".format(hook_impl.function.__qualname__), flush=True)
                 else:
-                    print("PLUGGY calling into {!r}".format(hook_impl.function.__qualname__))
+                    print("PLUGGY calling into {!r}".format(hook_impl.function.__qualname__), flush=True)
                     res = hook_impl.function(*args)
-                    print("PLUGGY returned from {!r}".format(hook_impl.function.__qualname__))
+                    print("PLUGGY returned from {!r}".format(hook_impl.function.__qualname__), flush=True)
                     if res is not None:
                         results.append(res)
                         if firstresult:  # halt further impl calls
@@ -62,4 +63,5 @@ def _multicall(hook_name, hook_impls, caller_kwargs, firstresult):
             except StopIteration:
                 pass
 
+        print("PLUGGY concluded _multicall()", flush=True)
         return outcome.get_result()
