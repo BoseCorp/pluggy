@@ -29,7 +29,7 @@ def _multicall(hook_name, hook_impls, caller_kwargs, firstresult):
                             )
 
                 if hook_impl.hookwrapper:
-                    print("PLUGGY calling into {!r}".format(hook_impl.function))
+                    print("PLUGGY calling into {!r}".format(hook_impl.function.__qualname__))
                     try:
                         gen = hook_impl.function(*args)
                         next(gen)  # first yield
@@ -37,11 +37,11 @@ def _multicall(hook_name, hook_impls, caller_kwargs, firstresult):
                     except StopIteration:
                         _raise_wrapfail(gen, "did not yield")
                     finally:
-                        print("PLUGGY returned from {!r}".format(hook_impl.function))
+                        print("PLUGGY returned from {!r}".format(hook_impl.function.__qualname__))
                 else:
-                    print("PLUGGY calling into {!r}".format(hook_impl.function))
+                    print("PLUGGY calling into {!r}".format(hook_impl.function.__qualname__))
                     res = hook_impl.function(*args)
-                    print("PLUGGY returned from {!r}".format(hook_impl.function))
+                    print("PLUGGY returned from {!r}".format(hook_impl.function.__qualname__))
                     if res is not None:
                         results.append(res)
                         if firstresult:  # halt further impl calls
