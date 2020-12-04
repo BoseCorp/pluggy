@@ -30,7 +30,7 @@ def _multicall(hook_name, hook_impls, caller_kwargs, firstresult):
                             )
 
                 if hook_impl.hookwrapper:
-                    print("PLUGGY calling into {!r}".format(hook_impl.function.__qualname__), flush=True)
+                    print("PLUGGY calling into {!r} from {}".format(hook_impl.function.__qualname__, hook_impl.function.__globals__["__file__"]), flush=True)
                     try:
                         gen = hook_impl.function(*args)
                         next(gen)  # first yield
@@ -40,7 +40,7 @@ def _multicall(hook_name, hook_impls, caller_kwargs, firstresult):
                     finally:
                         print("PLUGGY returned from {!r}".format(hook_impl.function.__qualname__), flush=True)
                 else:
-                    print("PLUGGY calling into {!r}".format(hook_impl.function.__qualname__), flush=True)
+                    print("PLUGGY calling into {!r} from {}".format(hook_impl.function.__qualname__, hook_impl.function.__globals__["__file__"]), flush=True)
                     res = hook_impl.function(*args)
                     print("PLUGGY returned from {!r}".format(hook_impl.function.__qualname__), flush=True)
                     if res is not None:
